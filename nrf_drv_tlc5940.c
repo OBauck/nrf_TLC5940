@@ -92,7 +92,6 @@ void spi_init()
 	
 	nrf_drv_spi_config_t spi_config = NRF_DRV_SPI_DEFAULT_CONFIG;
 	
-	spi_config.mode = NRF_DRV_SPI_MODE_2;
 	spi_config.frequency = NRF_DRV_SPI_FREQ_8M;
     spi_config.mosi_pin = SIN_PIN;
     spi_config.sck_pin  = SCLK_PIN;
