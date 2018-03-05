@@ -22,37 +22,37 @@ int main(void)
 {
 
 	nrf_drv_tlc5940_init();
-
+	
     while (1)
     {
 		int direction = 1;
-        for (int channel = 0; channel < 16; channel += direction)
+        for (int channel = 1; channel < 16; channel += direction)
 		{
-			nrf_drv_tlc5940_clear();
-			
-			if (channel == 0) 
+			if (channel == 1) 
 			{
 				direction = 1;
-			} 
-			else 
-			{
-				nrf_drv_tlc5940_set(channel - 1, 1000);
 			}
 			
-			nrf_drv_tlc5940_set(channel, 4095);
-			
-			if (channel != 15) 
-			{
-				nrf_drv_tlc5940_set(channel + 1, 1000);
-			} 
-			else 
+			if (channel == 15) 
 			{
 				direction = -1;
+			} 
+			
+			for(uint16_t j = 0; j < 1000; j+=4)
+			{
+				nrf_drv_tlc5940_clear();
+				nrf_drv_tlc5940_set(channel, j);
+				nrf_drv_tlc5940_update();
+				nrf_delay_ms(1);
 			}
 			
-			nrf_drv_tlc5940_update();
-			nrf_delay_ms(50);
+			for(uint16_t j = 1000; j > 0; j-=4)
+			{
+				nrf_drv_tlc5940_clear();
+				nrf_drv_tlc5940_set(channel, j);
+				nrf_drv_tlc5940_update();
+				nrf_delay_ms(1);
+			}
 		}
-
     }
 }

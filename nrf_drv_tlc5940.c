@@ -7,11 +7,21 @@
 #include "app_util_platform.h"
 #include "nrf_drv_spi.h"
 
+/*
+//PROTO
 #define GSCLK_PIN	22
-#define BLANK_PIN	23
+#define BLANK_PIN	26
 #define SCLK_PIN	24
 #define SIN_PIN		25
-#define XLAT_PIN	26
+#define XLAT_PIN	23
+*/
+
+//PCB
+#define GSCLK_PIN	31
+#define BLANK_PIN	30
+#define SCLK_PIN	28
+#define SIN_PIN		4
+#define XLAT_PIN	29
 
 #define SPI_INSTANCE  0 /**< SPI instance index. */
 static const nrf_drv_spi_t spi = NRF_DRV_SPI_INSTANCE(SPI_INSTANCE);  /**< SPI instance. */
@@ -141,15 +151,15 @@ uint32_t nrf_drv_tlc5940_update()
 		
 		if( rest == 0)
 		{
-			tlc5940_spi_values[i] = tlc5940_values[counter] & 0xff;
+			tlc5940_spi_values[NR_OF_SPI_VALUES - 1 - i] = tlc5940_values[counter] & 0xff;
 		}
 		else if( rest == 1)
 		{
-			tlc5940_spi_values[i] = ((tlc5940_values[counter] >> 8) & 0x0f) + (tlc5940_values[counter+1] & 0x0f);
+			tlc5940_spi_values[NR_OF_SPI_VALUES - 1 - i] = ((tlc5940_values[counter] >> 8) & 0x0f) | ((tlc5940_values[counter+1]<<4) & 0xf0);
 		}
 		else
 		{
-			tlc5940_spi_values[i] = ((tlc5940_values[counter+1] >> 4) & 0xff);
+			tlc5940_spi_values[NR_OF_SPI_VALUES - 1 - i] = ((tlc5940_values[counter+1] >> 4) & 0xff);
 			counter += 2;
 		}
 	}
